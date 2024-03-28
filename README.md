@@ -1,3 +1,7 @@
+Build prod - REST_API=https://cafechat.app/ ./build.sh
+Build dev - REST_API=http://localhost:8080/ ./build.sh
+1357676
+
 <h1 align="center">Boilerplate React.js + TypeScript + Vite 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.0-blue.svg?cacheSeconds=2592000" />

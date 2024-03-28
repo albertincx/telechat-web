@@ -1,0 +1,9 @@
+.append-more {
+  width: 100%;
+  text-align: center;
+  padding: 4px;
+}
+.append-more .btn {
+  text-align: center;
+  border: 1px solid #ddd;
+}

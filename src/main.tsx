@@ -1,9 +1,14 @@
-import { StrictMode } from 'react'
+import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { App } from '@/app'
 import './index.css'
+import Chat from '@/pages/Chat'
+import { Provider } from 'react-redux'
+import configureStore from '@/utils/configureStore'
 
-const rootElement = document.querySelector('[data-js="root"]')
+const rootElement = document.getElementById('apppopupmax')
+
+const initialState = {}
+const store = configureStore(initialState)
 
 if (!rootElement) {
   throw new Error('Failed to find the root element')
@@ -12,6 +17,8 @@ if (!rootElement) {
 const root = createRoot(rootElement)
 root.render(
   <StrictMode>
-    <App />
+    <Provider store={store}>
+      <Chat />
+    </Provider>
   </StrictMode>,
 )
