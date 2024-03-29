@@ -6,6 +6,7 @@ import svgrPlugin from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig(configEnv => ({
+  base: `${process.env.REST_API || ''}`,
   plugins: [
     react(),
     tsConfigPaths(),
