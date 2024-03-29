@@ -58,7 +58,7 @@ export function Chat () {
               </div>
               )
             : (
-              <div className='msger-button' onClick={toggle} title='Support service' />
+              <div className='messanger-button' onClick={toggle} title='Support service' />
               )}
         </div>
       </Popup>

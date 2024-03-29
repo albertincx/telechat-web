@@ -7,7 +7,7 @@ import { logger } from '../network'
 import notifySound from '../../../assets/sound.mp3'
 
 import html2canvas from 'html2canvas'
-import { ARSF_CHAT_EMMITTER_MESS } from '@/consts'
+import { CHAT_EMITTER } from '@/consts'
 
 let scrollEnd = false
 let lastLocation = ''
@@ -81,8 +81,7 @@ export function * getData (params) {
       connect(_rec, params)
       connected += 1
     }
-    const offset = 0
-    const { isScroll, isNewMessage } = params
+    const { isNewMessage } = params
 
     const pq: any = {}
     let { userId = 1 } = pq
@@ -156,7 +155,7 @@ const connect = (rec = false, params: any = {}) => {
             playSound()
           }
           if (window.__arsfChatEmmitter) {
-            window.__arsfChatEmmitter(ARSF_CHAT_EMMITTER_MESS, event)
+            window.__arsfChatEmmitter(CHAT_EMITTER, event)
           }
         })
     }

@@ -25,7 +25,7 @@ import saga from './saga'
 import reducer from './reducer'
 import Loader from '../Loader'
 import observe, { emitData } from '../../../utils/observers'
-import { ARSF_CHAT_EMMITTER_MESS } from '@/consts'
+import { CHAT_EMITTER } from '@/consts'
 
 const Div = styled()
 moment.extend(duration)
@@ -38,7 +38,7 @@ class MessageList extends Component<any, any> {
   public this$el = React.createRef<any>()
 
   componentDidMount () {
-    const name = ARSF_CHAT_EMMITTER_MESS
+    const name = CHAT_EMITTER
     observe(name, {
       [name]: this.getMessages.bind(this),
     })
