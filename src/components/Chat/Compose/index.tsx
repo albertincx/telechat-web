@@ -58,6 +58,12 @@ class Compose extends Component<Props> {
     return false
   }
 
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter' && (!e.ctrlKey && !e.shiftKey)) {
+      this.send(e)
+    }
+  }
+
   render (): React.ReactElement {
     return (
       <>
@@ -68,13 +74,7 @@ class Compose extends Component<Props> {
               ref={this.rel}
               className='compose-input form-control'
               placeholder='Start typing'
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.keyCode === 13) {
-                  if (!e.ctrlKey && !e.shiftKey) {
-                    this.send(e)
-                  }
-                }
-              }}
+              onKeyDown={this.handleKeyDown}
             />
             <div className='send'>
               <button
@@ -91,7 +91,7 @@ class Compose extends Component<Props> {
 
 export function mapDispatchToProps (dispatch): Props {
   return {
-    send: (textObj, userId) => dispatch({ ...textObj, type: 'messages_test', userId }),
+    send: (textObj) => dispatch({ ...textObj, type: 'messages_test' }),
   }
 }
 

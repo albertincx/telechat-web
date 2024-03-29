@@ -18,11 +18,12 @@ window.addEventListener('blur', function () {
   window.__arsfChatInBackground = true
 })
 window.instantChatBot = {
+  show: false,
   open: () => {
-    emitData('instantChatBotEvents', { open: true })
-  },
-  close: () => {
-    emitData('instantChatBotEvents', { open: false })
+    // @ts-ignore
+    window.instantChatBot.show = !window.instantChatBot.show
+    // @ts-ignore
+    emitData('instantChatBotEvents', { open: window.instantChatBot.show })
   },
 }
 

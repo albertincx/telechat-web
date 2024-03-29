@@ -19,9 +19,8 @@ let _rec = false
 const sound = new Audio(notifySound)
 
 // Play the sound
-function playSound () {
-  sound.play()
-}
+const playSound = () => sound.play()
+
 if (window.location.host === 'localhost:3000') {
   window.__arsfChatIdg = '4156467812'
 }
@@ -82,7 +81,7 @@ export function * getData (params) {
       connect(_rec, params)
       connected += 1
     }
-    let offset = 0
+    const offset = 0
     const { isScroll, isNewMessage } = params
 
     const pq: any = {}

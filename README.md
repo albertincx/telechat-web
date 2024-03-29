@@ -1,6 +1,12 @@
-Build prod - REST_API=https://cafechat.app/ ./build.sh
-Build dev - REST_API=http://localhost:8080/ ./build.sh
-1357676
+Build prod
+
+``REST_API=https://cafechat.app/ ./build.sh``
+
+Build dev
+
+``REST_API=http://localhost:8080/ ./build.sh``
+
+Forked from:
 
 <h1 align="center">Boilerplate React.js + TypeScript + Vite 👋</h1>
 <p>
