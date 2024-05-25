@@ -1,25 +1,10 @@
 import Storage from '@/utils/storage'
 import request from '@/utils/request'
+
 export function logger (e) {
-  // @ts-ignore
   if (import.meta.env.VITE_APP_ENVIRONMENT === 'development') {
     console.log(e)
   }
-}
-
-const restApi = 'test'
-
-Storage.set('ctoken', 'test')
-// @ts-ignore
-const API = import.meta.env.REST_API || restApi
-
-let API_URL = ''
-// @ts-ignore
-const API_URL2 = import.meta.env.REST_API
-
-const isRestApi = false
-if (isRestApi) {
-  API_URL = `${API}app/messenger/v1/accounts/`
 }
 
 function getHeader () {
@@ -34,8 +19,8 @@ export const docApiUrl = (a) => {
 }
 
 function * req (url, method = 'POST', postData: any = null) {
-  let apiUrl = API_URL
-  if (url.match('getMessages')) apiUrl = API_URL2
+  let apiUrl = ''
+  if (url.match('getMessages')) apiUrl = import.meta.env.REST_API
 
   url = `${apiUrl}${url}`
   url = docApiUrl(url)
@@ -54,7 +39,7 @@ function * req (url, method = 'POST', postData: any = null) {
   try {
     data = yield request(url, options)
   } catch (e) {
-    console.log(e)
+    logger(e)
   }
   return data
 }

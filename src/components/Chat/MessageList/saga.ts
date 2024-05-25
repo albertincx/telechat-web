@@ -6,7 +6,7 @@ import { logger } from '../network'
 // @ts-ignore
 import notifySound from '../../../assets/sound.mp3'
 
-import { CHAT_EMITTER } from '@/consts'
+import { CHAT_EMITTER, UID_STORED } from '@/components/Chat/consts'
 
 let scrollEnd = false
 let lastLocation = ''
@@ -24,11 +24,7 @@ if (window.location.host === 'localhost:3000') {
 }
 
 function getUid () {
-  const u = Storage.get('instantChatBotUidNameStored')
-  if (u) {
-    return u
-  }
-  return window.instantChatBotUidName
+  return Storage.get(UID_STORED) || window.instantChatBotUidName
 }
 
 export function wsSend (text, img) {
@@ -79,7 +75,6 @@ export function * getData (params) {
       connect(_rec, params)
       connected += 1
     }
-    const { isNewMessage } = params
 
     const pq: any = {}
     let { userId = 1 } = pq
@@ -119,6 +114,19 @@ const connect = (rec = false, params: any = {}) => {
     _rec = false
     window.__arsfChat = cc
     if (window.__arsfChat) {
+      window.__arsfChat.sendMessage = (message: string) => {
+        const msg = {
+          service: '',
+          g: window.__arsfChatIdg || '',
+          uid: window.instantChatBotUidName || getUid(),
+          message,
+        }
+        if (!window.instantChatBotUidName) {
+          window.instantChatBotUidName = msg.uid
+        }
+        window.__arsfChat.send(JSON.stringify(msg))
+      }
+
       window.__arsfChat.addEventListener('message',
         (event) => {
           if (
@@ -129,10 +137,27 @@ const connect = (rec = false, params: any = {}) => {
             playSound()
           }
 
-          if (window.__arsfChatEmmitter) {
-            window.__arsfChatEmmitter(CHAT_EMITTER, event)
+          if (window.__arsfChatEmmitter && event.data) {
+            let message = event.data
+            if (message[0] === '{') {
+              try {
+                const mess = JSON.parse(message)
+                if (typeof mess === 'object') {
+                  message = mess
+                  if (message.service === 'setUid') {
+                    Storage.set(UID_STORED, message.message)
+                  }
+                }
+              } catch (e) {
+                logger(e)
+              }
+            }
+            window.__arsfChatEmmitter(CHAT_EMITTER, { data: message })
           }
         })
+    }
+    if (params.cb) {
+      params.cb()
     }
     if (params.mount) {
       const message = { service: 'lastmes', g: '', uid: '' }
@@ -178,24 +203,11 @@ export function * newMessage ({ text, img }) {
 
 export function * sendGroupAction ({ message }) {
   try {
-    message = { message }
-    if (message.message[0] === '{') {
-      try {
-        const mess = JSON.parse(message.message)
-        if (typeof mess === 'object') {
-          message = mess
-        }
-      } catch (e) {
-        logger(e)
-      }
-    }
     if (message.service) {
       if (message.service === 'setUid') {
         if (!window.instantChatBotUidName) {
           window.instantChatBotUidName = message.message
         }
-        const { lastMess = [] } = message
-        yield put({ type: 'messages_success', data: lastMess })
       }
       if (message.service === 'lastmes') {
         const { lastMess = [] } = message
@@ -205,6 +217,7 @@ export function * sendGroupAction ({ message }) {
       if (connected > 1 && message.greeting) {
         //
       } else {
+        message = { message }
         message.sender = 'admin'
         yield put({ type: 'messages_success', data: [message] })
       }

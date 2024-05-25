@@ -25,8 +25,8 @@ import saga from './saga'
 import reducer from './reducer'
 import Loader from '../Loader'
 import observe, { emitData } from '../../../utils/observers'
-import { CHAT_EMITTER } from '@/consts'
 import { MessageObject } from './types'
+import { CHAT_EMITTER } from '@/components/Chat/consts'
 
 const Div = styled()
 moment.extend(duration)
