@@ -15,9 +15,9 @@ if (!rootElement) {
 
 const root = createRoot(rootElement)
 root.render(
-  <StrictMode>
+  <>
     <Provider store={store}>
       <Chat />
     </Provider>
-  </StrictMode>,
+  </>,
 )

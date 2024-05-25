@@ -10,6 +10,7 @@ declare global {
   }
   interface Window {
     __arsfChat: any;
+    __arsfChatConnect: any;
     __arsfChatIdg: any;
     __arsfChatUrl: any;
     __arsfChatIdu: any;

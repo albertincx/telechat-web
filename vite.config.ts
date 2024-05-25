@@ -4,7 +4,6 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 import { EsLinter, linterPlugin } from 'vite-plugin-linter'
 import svgrPlugin from 'vite-plugin-svgr'
 
-// https://vitejs.dev/config/
 export default defineConfig(configEnv => ({
   base: `${process.env.REST_API || ''}`,
   plugins: [

@@ -6,12 +6,10 @@ import { logger } from '../network'
 // @ts-ignore
 import notifySound from '../../../assets/sound.mp3'
 
-import html2canvas from 'html2canvas'
 import { CHAT_EMITTER } from '@/consts'
 
 let scrollEnd = false
 let lastLocation = ''
-let lastOffset = 0
 let connected = 0
 let reconnect = true
 let _rec = false
@@ -94,13 +92,7 @@ export function * getData (params) {
       yield put({ type: 'messages_clear' })
     }
     if (isNew) {
-      lastOffset = 0
-    }
-    if (isNew) {
       scrollEnd = false
-    }
-    if (isNewMessage) {
-      lastOffset = 0
     }
     if (scrollEnd) {
       return
@@ -129,31 +121,14 @@ const connect = (rec = false, params: any = {}) => {
     if (window.__arsfChat) {
       window.__arsfChat.addEventListener('message',
         (event) => {
-          if (event?.data === '#getscreen') {
-            html2canvas(document.body).then(canvas => {
-              const dataURL = canvas.toDataURL('image/png')
-              wsSend('', dataURL)
-            })
-            return
-          } else if (event?.data === '#getlogs') {
-            let conArr = console.everything || []
-            if (conArr.length) {
-              try {
-                conArr = conArr.map(it => {
-                  const v = it.value?.map(it2 => {
-                    return JSON.stringify(it2)
-                  })
-                  return `${it.type} - ${v}`
-                })
-                wsSend('logs', conArr)
-              } catch (e) {
-                console.log(e)
-              }
-            }
-            return
-          } else if (window.__arsfChatInBackground) {
+          if (
+            window.__arsfChatInBackground &&
+            !event.data.match('setUid') &&
+            !event.data.match('lastmes')
+          ) {
             playSound()
           }
+
           if (window.__arsfChatEmmitter) {
             window.__arsfChatEmmitter(CHAT_EMITTER, event)
           }
@@ -190,6 +165,8 @@ const connect = (rec = false, params: any = {}) => {
   }
 }
 
+window.__arsfChatConnect = connect
+
 export function * newMessage ({ text, img }) {
   try {
     const message = wsSend(text, img)
@@ -199,9 +176,8 @@ export function * newMessage ({ text, img }) {
   }
 }
 
-export function * sendGroupAction (params) {
+export function * sendGroupAction ({ message }) {
   try {
-    let { message } = params
     message = { message }
     if (message.message[0] === '{') {
       try {
@@ -241,6 +217,7 @@ export function * sendGroupAction (params) {
 export default function * saga () {
   yield takeLatest('messages_clear', clear)
   yield takeLatest('messages_load', getData)
+  // @ts-ignore
   yield takeLatest('send_action', sendGroupAction)
   yield takeLatest('scroll_mess', getData)
   // @ts-ignore

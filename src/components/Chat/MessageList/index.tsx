@@ -26,13 +26,22 @@ import reducer from './reducer'
 import Loader from '../Loader'
 import observe, { emitData } from '../../../utils/observers'
 import { CHAT_EMITTER } from '@/consts'
+import { MessageObject } from './types'
 
 const Div = styled()
 moment.extend(duration)
 
 window.__arsfChatEmmitter = emitData
 
-class MessageList extends Component<any, any> {
+interface IProps {
+  loading?: boolean,
+  clear: () => void,
+  getMessages: (params) => void,
+  sendAction: (params) => void,
+  messages?: MessageObject,
+}
+
+class MessageList extends Component<IProps, any> {
   public lastLocation = ''
 
   public this$el = React.createRef<any>()
@@ -85,6 +94,8 @@ class MessageList extends Component<any, any> {
   renderMessages () {
     let i = 0
     const mess = this.props.messages
+    if (!mess) return null
+
     const messageCount = mess.messages && mess.messages.length
     const messagesRender: any[] = []
     while (i < messageCount) {
@@ -144,7 +155,7 @@ class MessageList extends Component<any, any> {
 
   renderContent = () => (
     <div className='arsf-message-list' ref={this.this$el}>
-      {this.props.messages.messages.length < this.props.messages.total
+      {this.props.messages && (this.props.messages.messages.length < this.props.messages.total)
         ? (
           <div>{!this.props.loading
             // eslint-disable-next-line react/jsx-handler-names
@@ -182,9 +193,9 @@ const mapStateToProps = createStructuredSelector({
   error: makeSelectError(),
 })
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch): IProps {
   return {
-    clear: params => dispatch({ type: 'messages_clear', ...params }),
+    clear: () => dispatch({ type: 'messages_clear' }),
     getMessages: params => dispatch({ type: 'messages_load', ...params }),
     sendAction: params => dispatch({ type: 'send_action', ...params }),
   }

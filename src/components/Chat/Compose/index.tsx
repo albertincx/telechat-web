@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import observe, { emitData } from '../../../utils/observers'
 import styled from './styled'
+import TextArea from './components/TextArea'
 
 const Div = styled()
 
@@ -44,7 +45,7 @@ class Compose extends Component<Props> {
 
   send = (e) => {
     if (e) {
-      const el = e.target
+      const el = e.target || { value: '' }
       const v = `${el.value}`.trim()
       if (v) {
         this.props.send({ text: v })
@@ -58,24 +59,13 @@ class Compose extends Component<Props> {
     return false
   }
 
-  handleKeyDown = (e) => {
-    if (e.key === 'Enter' && (!e.ctrlKey && !e.shiftKey)) {
-      this.send(e)
-    }
-  }
-
   render (): React.ReactElement {
     return (
       <>
         <Div>
           {/* eslint-disable-next-line react/jsx-handler-names */}
           <form onSubmit={this.test} className='compose'>
-            <textarea
-              ref={this.rel}
-              className='compose-input form-control'
-              placeholder='Start typing'
-              onKeyDown={this.handleKeyDown}
-            />
+            <TextArea send={this.send} rel={this.rel} />
             <div className='send'>
               <button
                 className='btn btn-ghost-success img'

@@ -7,22 +7,17 @@ const Popup = styled()
 
 // Event listener for focus change
 window.addEventListener('focus', function () {
-  // isTabActive = true
-  // console.log('Tab is active')
   window.__arsfChatInBackground = false
 })
 
 window.addEventListener('blur', function () {
-  // isTabActive = false
-  // console.log('Tab is in background')
   window.__arsfChatInBackground = true
 })
+
 window.instantChatBot = {
   show: false,
   open: () => {
-    // @ts-ignore
     window.instantChatBot.show = !window.instantChatBot.show
-    // @ts-ignore
     emitData('instantChatBotEvents', { open: window.instantChatBot.show })
   },
 }
@@ -39,7 +34,6 @@ export function Chat () {
     })
   }, [])
   const toggle = () => {
-    // @ts-ignore
     window.instantChatBot.open()
   }
   return (
