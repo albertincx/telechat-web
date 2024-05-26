@@ -156,6 +156,9 @@ const connect = (rec = false, params: any = {}) => {
           }
         })
     }
+    if (window.onConnectIvChat) {
+      window.onConnectIvChat()
+    }
     if (params.cb) {
       params.cb()
     }
@@ -191,6 +194,11 @@ const connect = (rec = false, params: any = {}) => {
 }
 
 window.__arsfChatConnect = connect
+
+// @ts-ignore
+if (window.onConnectIvChat) {
+  connect()
+}
 
 export function * newMessage ({ text, img }) {
   try {

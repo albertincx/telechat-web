@@ -21,5 +21,6 @@ declare global {
     location: any;
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
     instantChatBot: any;
+    onConnectIvChat: () => void;
   }
 }
